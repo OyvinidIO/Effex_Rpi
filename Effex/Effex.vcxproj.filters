@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Header files">
+      <UniqueIdentifier>{19ee0045-0ea3-4031-bccc-9af50dc117ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files">
+      <UniqueIdentifier>{5e2c38e1-c144-49a1-aed1-eb1b391d093f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\Effects">
+      <UniqueIdentifier>{ba7f7a47-8eb2-49a3-90c1-97f49baed81d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\Effects">
+      <UniqueIdentifier>{b55b1c28-f79f-461b-b4c1-d51202a2097a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\STK">
+      <UniqueIdentifier>{2f473585-2a2d-46ad-b6cb-56dc4372d48a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\STK">
+      <UniqueIdentifier>{8a444af3-0acb-4992-b03a-901716eaf64c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EffectManager.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="IGuitarEffect.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="CleanEffect.h">
+      <Filter>Header files\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="DelayEffect.h">
+      <Filter>Header files\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="Distortion.h">
+      <Filter>Header files\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\STK\src\stk\RtAudio.h">
+      <Filter>Header files\STK</Filter>
+    </ClInclude>
+    <ClInclude Include="deps\STK\src\stk\Stk.h">
+      <Filter>Header files\STK</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="EffectManager.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="IGuitarEffect.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="CleanEffect.cpp">
+      <Filter>Source files\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="DelayEffect.cpp">
+      <Filter>Source files\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="Distortion.cpp">
+      <Filter>Source files\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="deps\STK\src\RtAudio.cpp">
+      <Filter>Source files\STK</Filter>
+    </ClCompile>
+    <ClCompile Include="deps\STK\src\Stk.cpp">
+      <Filter>Source files\STK</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
