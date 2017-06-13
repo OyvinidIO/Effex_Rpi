@@ -74,6 +74,7 @@
     <ClInclude Include="Distortion.h" />
     <ClInclude Include="EffectManager.h" />
     <ClInclude Include="IGuitarEffect.h" />
+    <ClInclude Include="MsgStruct.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CleanEffect.cpp" />
@@ -84,6 +85,7 @@
     <ClCompile Include="EffectManager.cpp" />
     <ClCompile Include="IGuitarEffect.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MsgStruct.cpp" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>

@@ -7,17 +7,25 @@ EffectManager::EffectManager() {
 	inputdata_.exceptions(ofstream::failbit);
 	outputdata_.exceptions(ofstream::failbit);
 	streamStarted_ = false;
+	effectParamsChanged_ = false;
 }
+
 void EffectManager::setEffect(IGuitarEffect* effect) {
 	effects_.emplace_back(effect);
 }
+
 int EffectManager::applyEffect(double* iData, double* oData, unsigned int bufferSize) {
+	
+	double sample;
 	for (int i = 0; i < bufferSize; i++) {
-		oData[i] = iData[i];
-	}
+		sample = iData[i];
+		oData[i] = sample;
+		oData[i+bufferSize] = sample;
+	}	
+
 	// Apply effects
 	for (auto& element : effects_) element->applyEffect(oData, oData, bufferSize);
-
+	
 	//// Log I/O	
 	//if (!streamStarted_) {
 	//	streamStarted_ = true;
@@ -43,6 +51,17 @@ int EffectManager::applyEffect(double* iData, double* oData, unsigned int buffer
 	//}
 	return 0;
 }
+
+void EffectManager::changeEffectParameters(void * userdata) {
+	
+	for (auto& element : effects_) {
+		
+		element->changeEffectParameters(userdata);
+		effectParamsChanged_ = element->effectParamsChanged_; // Flag set when effect has returned change successful
+		if (effectParamsChanged_) break;
+	}
+}
+
 void EffectManager::deallocateEffects() {
 	for (auto element : effects_)
 		delete element;

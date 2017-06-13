@@ -29,40 +29,47 @@
 #include "deps/STK/src/stk/RtAudio.h"
 #include "deps/STK/src/stk/Stk.h"
 #include <iostream>
+#include <string>
+#include <ctime>
 #include "CleanEffect.h"
 #include "EffectManager.h"
 #include "DelayEffect.h"
+#include "MsgStruct.h"
 using namespace stk; 
 using namespace std;
 
 // Using a global object to hold the effects for simplicity.
 EffectManager effectManager;
+MsgFromUser UDPmsg;
 
-int cbFunc(void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames, double, RtAudioStreamStatus, void *) {
+int cbFunc(void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames, double, RtAudioStreamStatus, void * userdata) {
+	
+	effectManager.changeEffectParameters(userdata);	
 	effectManager.applyEffect((double*)inputBuffer, (double*)outputBuffer, nBufferFrames);
 	return 0;
 }
 
-int main()
-{
+int main(){	
+	
 	// Declare parameters
-	unsigned int nBufferFrames = 256;
+	unsigned int nBufferFrames = 44; 
 	unsigned int sampleRate = 44100;
 	unsigned int nIChannels = 1;
 	unsigned int nOChannels = 2;
 	RtAudio* adac = new RtAudio();
 	RtAudio::StreamOptions StreamOptions;
-	StreamOptions.flags = RTAUDIO_NONINTERLEAVED;
+	StreamOptions.flags = RTAUDIO_NONINTERLEAVED + RTAUDIO_SCHEDULE_REALTIME ;
 
-
+	void * userdata = &UDPmsg; // Data from user to change effect parameters
+	
 	// Effex parameters
 	double maingain = 0.3;// Clean paramters
-	double delaygain = 0.65*0.3; // Delay parameters
+	double delaygain = 0.65*maingain; // Delay parameters
 	int delayfactor = 400; // MS
 
 	// Apply effects
 	effectManager.setEffect(new CleanEffect(maingain));
-	effectManager.setEffect(new DelayEffect(nBufferFrames, delaygain, delayfactor));
+	//effectManager.setEffect(new DelayEffect(nBufferFrames, delaygain, delayfactor));
 	
 	// Open the default realtime output device.
 	RtAudio::StreamParameters oParameters, iParameters;
@@ -72,16 +79,14 @@ int main()
 	iParameters.nChannels = nIChannels;
 	
 	try { 
-		adac->openStream(&oParameters, &iParameters, RTAUDIO_FLOAT64, sampleRate, &nBufferFrames, cbFunc,NULL, &StreamOptions);
+		adac->openStream(&oParameters, &iParameters, RTAUDIO_FLOAT64, sampleRate, &nBufferFrames, cbFunc, userdata, &StreamOptions);
 	}
 	catch (RtAudioError &error) {
-		//cout << "Now I'm here" << endl;
 		error.printMessage();
 		exit(EXIT_FAILURE);
 	}
 	try {
-		adac->startStream();
-		
+		adac->startStream();		
 	}
 	catch (RtAudioError &error) {
 		
@@ -90,8 +95,38 @@ int main()
 	}
 	
 	cout << "Play ... " << endl;	
-	char input;
-	cin.get(input); // block until user hits return
+	
+
+	string inputName;
+	int inputDelay;
+	double inputGain;
+	UDPmsg.header_.EffectName = "delay";
+	UDPmsg.header_.enable = true;
+	
+	clock_t start;
+	while (1) {
+		//cin.get(input); // block until user hits return
+		
+		cout << "Input changes" << endl;
+		cin >> inputDelay;
+		if (inputDelay == 0) break;
+		break;
+		UDPmsg.body_.params[0] = inputDelay;
+		//UDPmsg.body.params_[1] = inputGain;		
+		
+		/*cout << "Wait for effect to change" << endl;		
+		userdata = &UDPmsg;
+
+		double duration;
+		start = clock();
+		while (!effectManager.effectParamsChanged_) {
+			duration = (std::clock() - start) / (double)CLOCKS_PER_SEC;
+			if (duration > 10) {
+				cout << "# ERROR :  Effect change timed out" << endl;				
+			}			
+		}
+		effectManager.effectParamsChanged_ = false;*/
+	}
 
 	try {
 		adac->stopStream();

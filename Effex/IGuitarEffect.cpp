@@ -2,6 +2,7 @@
 
 IGuitarEffect::IGuitarEffect()
 {
+	enableEffect_ = true;
 }
 
 IGuitarEffect::~IGuitarEffect()

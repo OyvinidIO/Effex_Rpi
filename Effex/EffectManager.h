@@ -10,8 +10,12 @@ public:
 	EffectManager();
 	void setEffect(IGuitarEffect* effect);
 	int applyEffect(double* iData, double* oData, unsigned int bufferSize);
+	void changeEffectParameters(void * userdata);
 	void deallocateEffects();
 	~EffectManager();
+
+	bool effectParamsChanged_;
+
 private:
 	std::vector<IGuitarEffect*> effects_;
 	bool streamStarted_;
